@@ -1,0 +1,153 @@
+#page-content-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding-top: 50px;
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+#HomeButton {
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+#LocateButton {
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+#info {
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+#search {
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+.esriScalebar {
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+.esriSimpleSliderTL {
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+#helpbutton.btn-default {
+    color: #52bdec;
+    border-color: #52bdec;
+    background-color: #ffffff;
+    width: 100%;
+}
+
+#helpbutton.btn-default:hover {
+    color: #ffffff;
+    background-color: #52bdec;
+    border-color: #ffffff;
+}
+
+#helpbutton.btn-default:focus {
+    color: #52bdec;
+    background-color: #ffffff;
+    border-color: #52bdec;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.close{
+    color: #2a4a82;
+    opacity: .8;
+}
+
+.close:hover {
+    color: #2a4a82;
+    opacity: .2;
+}
+
+.panel-default .panel-heading {
+    margin-top: 50px;
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #2a4a82;
+}
+
+.panel-footer {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #2a4a82;
+}
+
+.panel-footer {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #2a4a82;
+}
+
+.panel-default .panel-body {
+    max-height: 450px;
+    overflow-y: auto;
+    border-color: #ffffff;
+    background: #ffffff;
+}
+
+.panel-default {
+    border-color: #ffffff;
+    background: #ffffff;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: absolute;
+    width: 0;
+    height: 100%;
+    overflow-y: auto;
+    background: #ffffff;
+    border-right: 2px solid #52bdec;
+    opacity: .0;
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+
+#wrapper.toggled #HomeButton {
+    left: 171px;
+}
+
+#wrapper.toggled #LocateButton {
+    left: 171px;
+}
+
+#wrapper.toggled #info {
+    left: 170px;
+}
+
+#wrapper.toggled #search {
+    left: 211px;
+}
+
+#wrapper.toggled .esriScalebar {
+    padding-left: 150px;
+}
+
+#wrapper.toggled .esriSimpleSliderTL {
+    left: 170px;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 150px;
+    opacity: .9;
+}

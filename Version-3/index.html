@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+    <title>Groundwater Interactive Map | North Plains Groundwater Conservation District</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="http://map.northplainsgcd.org/img/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="http://map.northplainsgcd.org/img/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="http://map.northplainsgcd.org/img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="http://map.northplainsgcd.org/img/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="http://map.northplainsgcd.org/img/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="http://map.northplainsgcd.org/img/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="http://map.northplainsgcd.org/img/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="http://map.northplainsgcd.org/img/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="http://map.northplainsgcd.org/img/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="http://map.northplainsgcd.org/img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="http://map.northplainsgcd.org/img/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="http://map.northplainsgcd.org/img/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="http://map.northplainsgcd.org/img/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="http://map.northplainsgcd.org/img/manifest.json">
+    <link rel="mask-icon" href="http://map.northplainsgcd.org/img/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="http://map.northplainsgcd.org/img/favicon.ico">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="http://map.northplainsgcd.org/img/mstile-144x144.png">
+    <meta name="msapplication-config" content="http://map.northplainsgcd.org/img/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/navbar.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+    <script src="js/gauge.js"></script>
+    <script src="js/depthChart.js"></script>
+    <script src="js/thickness.js"></script>
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/themes/calcite/dijit/calcite.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/themes/calcite/esri/esri.css">
+    <nav class="navbar navbar-default navbar-fixed-top hidden-md">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar" id="bars">
+                    <a><i class="fa fa-chevron-down" id="dropmenu"></i></a>
+                </button>
+                <a class="navbar-brand" href="http://www.northplainsgcd.org" id="logo"><img src="Images/logo.png" alt=""></a>
+            </div>
+            <div class="collapse navbar-collapse" id="mainNavBar">
+                <ul class="nav navbar-nav">
+                        <li class="dropdown" id="wells">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-crosshairs"></i> Wells Maps <i class="fa fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li id="title"><a><u>Well Logs and Plugging Reports</u></a></li>
+                                <li id="district-toggle"><a href="#">District's Well Database</a></li>
+                                <li id="twdblogs-toggle"><a href="#">TWDB's Well Database</a></li>
+                                <li id="twdbplugs-toggle"><a href="#">TWDB's Plugging Reports</a></li>
+                                <li class="divider"></li>
+                                <li id="title"><a><u>Water Levels</u></a></li>
+                                <li id="recorder-toggle" class="active"><a href="#">Continuous Well Monitoring Network</a></li>
+                                <li id="annual-toggle"><a href="#">Annual Well Monitoring Network</a></li>
+                                <li class="divider"></li>
+                                <li id="title"><a><u>Water Quality</u></a></li>
+                                <li id="twdb-toggle"><a href="#">TWDB's Database</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown" id="hydro">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-tint"></i> Hydo Maps <i class="fa fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li id="depth-toggle"><a href="#" id="imgTitles"><img src="images/depth.png" href="#" id="depthImg"></br>Depth to Water</a></li>
+                                <li id="average-toggle"><a href="#" id="imgTitles"><img src="images/decline.png" href="#" id="declineImg"></br>Average Decline</a></li>
+                                <li id="thickness-toggle"><a href="#" id="imgTitles"><img src="images/thickness.png" href="#" id="thicknessImg"></br>Saturated Thickness</a></li>
+                                <li class="divider"></li>
+                                <li id="none-toggle" class="active"><a href="#" id="imgTitles">None</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown" id="Aquifers">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-map-o"></i> Aquifers <i class="fa fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li id="major-toggle"><a href="#" id="imgTitles"><img src="images/major.png" href="#" id="majorImg"></br>Major Aquifers</a></li>
+                                <li id="minor-toggle"><a href="#" id="imgTitles"><img src="images/minor.png" href="#" id="minorImg"></br>Minor Aquifers</a></li>
+                                <li class="divider"></li>
+                                <li id="none-aquifer-toggle" class="active"><a href="#" id="imgTitles">None</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                      <li class="dropdown" id="baselayer">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-th-large"></i> Basemaps <i class="fa fa-chevron-down"></i></a>
+                          <ul class="dropdown-menu">
+                              <li id="imagery-toggle"><a href="#" id="imgTitles"><img src="images/imagery.jpg" href="#" id="imageryImg"></br>Imagery</a></li>
+                              <li id="streets-toggle"><a href="#" id="imgTitles"><img src="images/street.jpg" href="#" id="streetImg"></br>Streets</a></li>
+                              <li id="gray-toggle"><a href="#" id="imgTitles"><img src="images/gray.jpg" href="#" id="grayImg"></br>Light Gray</a></li>
+                              <li id="topo-toggle" class="active"><a href="#" id="imgTitles"><img src="images/topo.jpg" href="#" id="topoImg"></br>Topographic</a></li>
+                              <li id="usaTopo-toggle"><a href="#" id="imgTitles"><img src="images/usaTopo.jpg" href="#" id="usaTopoImg"></br>USA Topographic</a></li>
+                              <li id="geo-toggle"><a href="#" id="imgTitles"><img src="images/geo.jpg" href="#" id="geoImg"></br>National Geographic</a></li>
+                              <li id="soil-toggle"><a href="#" id="imgTitles"><img src="images/soil.png" href="#" id="soilImg"></br>USDA-NRCS Soil Survey</a></li>
+                          </ul>
+                      </li>
+                      <li id="legend-toggle"><a href="#" id="menu-toggle"><i class="fa fa-list"></i> Legend</a></li>
+                      <li><a data-toggle="modal" data-target="#disclamerWindow" href="#"><i class="fa fa-info"></i> INFO</a></li>
+                    </ul>
+            </div>
+        </div>
+    </nav>
+        <div class="modal fade" id="disclamerWindow">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Introduction & Disclaimer</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4><i><u><b>INTRODUCTION</b></u></h4>
+                        <img src="images/intro.jpg">
+                        <br><br><h4><b><i>For general information:</i></b><br>North Plains Groundwater Conservation District<br>601 East First Street<br>P.O. Box 795<br>Dumas, TX 79029<br>Phone: <a href="tel://1-806-935-6401">(806) 935-6401</a><br> Fax: (806) 935-6633<br> <br><b><i>For technical questions:</i></b><br>Paul M. Sigle, EIT<br>Phone: <a href="tel://1-806-935-6401">(806) 935-6401</a><br>Email: <a href="mailto:psigle@northplainsgcd.org">psigle@northplainsgcd.org</a><br><br></h4>
+                        <h4><i><u><b>DISCLAIMER</b></u></h4><h4><p>The data in the Groundwater Interactive Map represents the best available information provided to the North Plains Groundwater Conservation District. The district provides the information via this web site as a public service. The district does not assume any legal liability or responsibility nor does it make any guarantees or warranties as to the accuracy, completeness or suitability of the information for any particular purpose.</p></i></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="depthModal">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Depth to Water</h4>
+              </div>
+              <div class="modal-body">
+                <div id="depthChart"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="thicknessModal">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Saturated Thickness</h4>
+              </div>
+              <div class="modal-body">
+                <div id="thickness"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </head>
+
+  <body class="calcite">
+    <script src="https://js.arcgis.com/3.18/"></script>
+    <script src="js/map.js"></script>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                <button type="button" class="close" href="#" id="legendclose">&times;</button>
+                <h3 class="panel-title"><i class="fa fa-list"></i></span> Legend</h3>
+                </div>
+            <div class="panel-body" id="legend"></div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#help" id="helpbutton"><span class="glyphicon glyphicon-question-sign"></span> Help</button>
+                </div>
+            </div>
+        </div>
+        <div id="page-content-wrapper">
+          <div id="search"></div>
+          <div id="mapDiv">
+              <div id="HomeButton"></div>
+              <div id="LocateButton"></div>
+              <span id="info"></span>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="help">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Definitions for Legend Terms</h4>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <li class="list-group-item"><b><i>Average Decline:</i></b> The estimated amount of decline across the district (feet).</li>
+                        <li class="list-group-item"><b><i>County:</i></b> The county lines for each county located within the district.</li>
+                        <li class="list-group-item"><b><i>Depth of Water:</i></b> The estimated depth of water from the surface to the water table.</li>
+                        <li class="list-group-item"><b><i>Major Aquifers:</i></b> Are aquifers that produce large amount of water over large areas.</li>
+                        <li class="list-group-item"><b><i>Minor Aquifers:</i></b> Are aquifer that produce minor amounts of water over large areas or large amounts of water over small areas.</li>
+                        <li class="list-group-item"><b><i>Outcrop:</i></b> Portion of a water-bearing rock unit exposed at the land surface.</li>
+                        <li class="list-group-item"><b><i>District's Outline:</i></b> The boundary of the district's area.</li>
+                        <li class="list-group-item"><b><i>Saturated Thickness:</i></b> The distance from the top of an aquifer to the base of the aquifer where the pore spaces are completely filled with water.</li>
+                        <li class="list-group-item"><b><i>Section, Block & Survey:</i></b> A public land survey system used to describe the location of a tract of land. A normal section is one square mile or 640 acres.</li>
+                        <li class="list-group-item"><b><i>Subcrop:</i></b> Portion of a water-bearing rock unit existing below other rock units.</li>
+                        <li class="list-group-item"><b><i>Wells:</i></b> The locations of all groundwater producing wells located within the district's area.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#menu-toggle").click( function (e){
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+            $("#legend-toggle").toggleClass("active");
+        });
+        $("#legendclose").click( function (e){
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+            $("#legend-toggle").toggleClass("active");
+        });
+        $(document).ready(function() {
+            $("#hydro li").click(function (e) {
+                switch (e.target.text) {
+                case "Depth to Water":
+                    $("#depth-toggle").addClass("active");
+                    $("#average-toggle").removeClass("active");
+                    $("#thickness-toggle").removeClass("active");
+                    $("#none-toggle").removeClass("active");
+                    break;
+                case "Average Decline":
+                    $("#depth-toggle").removeClass("active");
+                    $("#average-toggle").addClass("active");
+                    $("#thickness-toggle").removeClass("active");
+                    $("#none-toggle").removeClass("active");
+                    break;
+                case "Saturated Thickness":
+                    $("#depth-toggle").removeClass("active");
+                    $("#average-toggle").removeClass("active");
+                    $("#thickness-toggle").addClass("active");
+                    $("#none-toggle").removeClass("active");
+                    break;
+                case "None":
+                    $("#depth-toggle").removeClass("active");
+                    $("#average-toggle").removeClass("active");
+                    $("#thickness-toggle").removeClass("active");
+                    $("#none-toggle").addClass("active");
+                    break;
+                }
+            });
+        });
+        $(document).ready(function() {
+            $("#Aquifers li").click(function (e) {
+                switch (e.target.text) {
+                case "Major Aquifers":
+                    $("#major-toggle").addClass("active");
+                    $("#minor-toggle").removeClass("active");
+                    $("#none-aquifer-toggle").removeClass("active");
+                    break;
+                case "Minor Aquifers":
+                    $("#major-toggle").removeClass("active");
+                    $("#minor-toggle").addClass("active");
+                    $("#none-aquifer-toggle").removeClass("active");
+                    break;
+                case "None":
+                    $("#major-toggle").removeClass("active");
+                    $("#minor-toggle").removeClass("active");
+                    $("#none-aquifer-toggle").addClass("active");
+                    break;
+                }
+            });
+        });
+        $(document).ready(function() {
+            $("#wells li").click(function (e) {
+                switch (e.target.text) {
+                case "District's Well Database":
+                    $("#district-toggle").addClass("active");
+                    $("#twdblogs-toggle").removeClass("active");
+                    $("#twdbplugs-toggle").removeClass("active");
+                    $("#recorder-toggle").removeClass("active");
+                    $("#annual-toggle").removeClass("active");
+                    $("#twdb-toggle").removeClass("active");
+                    break;
+                case "TWDB's Well Database":
+                    $("#district-toggle").removeClass("active");
+                    $("#twdblogs-toggle").addClass("active");
+                    $("#twdbplugs-toggle").removeClass("active");
+                    $("#recorder-toggle").removeClass("active");
+                    $("#annual-toggle").removeClass("active");
+                    $("#twdb-toggle").removeClass("active");
+                    break;
+                case "TWDB's Plugging Reports":
+                    $("#district-toggle").removeClass("active");
+                    $("#twdblogs-toggle").removeClass("active");
+                    $("#twdbplugs-toggle").addClass("active");
+                    $("#recorder-toggle").removeClass("active");
+                    $("#annual-toggle").removeClass("active");
+                    $("#twdb-toggle").removeClass("active");
+                    break;
+                case "Continuous Well Monitoring Network":
+                    $("#district-toggle").removeClass("active");
+                    $("#twdblogs-toggle").removeClass("active");
+                    $("#twdbplugs-toggle").removeClass("active");
+                    $("#recorder-toggle").addClass("active");
+                    $("#annual-toggle").removeClass("active");
+                    $("#twdb-toggle").removeClass("active");
+                    break;
+                case "Annual Well Monitoring Network":
+                    $("#district-toggle").removeClass("active");
+                    $("#twdblogs-toggle").removeClass("active");
+                    $("#twdbplug-toggle").removeClass("active");
+                    $("#recorder-toggle").removeClass("active");
+                    $("#annual-toggle").addClass("active");
+                    $("#twdb-toggle").removeClass("active");
+                    break;
+                case "TWDB's Database":
+                    $("#district-toggle").removeClass("active");
+                    $("#twdblogs-toggle").removeClass("active");
+                    $("#twdbplug-toggle").removeClass("active");
+                    $("#recorder-toggle").removeClass("active");
+                    $("#annual-toggle").removeClass("active");
+                    $("#twdb-toggle").addClass("active");
+                    break;
+                }
+            });
+        });
+    </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72127817-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+  </body>
+</html>

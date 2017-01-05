@@ -1,0 +1,133 @@
+var map;
+require([
+  "esri/map",
+  "application/bootstrapmap",
+  "esri/dijit/Scalebar",
+  "esri/dijit/HomeButton",
+  "esri/dijit/LocateButton",
+  "esri/geometry/webMercatorUtils",
+  "esri/layers/FeatureLayer",
+  "esri/dijit/Popup",
+  "esri/dijit/InfoWindowLite",
+  "esri/InfoTemplate",
+  "esri/dijit/Legend",
+  "dojo/_base/array",
+  "dojo/parser",
+  "dojo/dom",
+  "dojo/domReady!"
+], function(
+  Map,
+  BootstrapMap,
+  Scalebar,
+  HomeButton,
+  LocateButton,
+  webMercatorUtils,
+  FeatureLayer,
+  Popup,
+  InfoWindowLite,
+  InfoTemplate,
+  Legend,
+  arrayUtils,
+  parser,
+  dom
+) {
+  parser.parse();
+//Create Map
+  var map = BootstrapMap.create("mapDiv", {
+    center: [-101.524190, 36.093145],
+    zoom: 9,
+    scrollWheelZoom: true
+  });
+  map.setBasemap("topo");
+//Show Coordinates
+  map.on("load", function() {
+    map.on("mouse-move", showCoordinates);
+    map.on("mouse-drag", showCoordinates);
+  });
+  function showCoordinates(evt) {
+    var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
+    dom.byId("info").innerHTML = mp.y.toFixed(6) + ", " + mp.x.toFixed(6);
+  }
+//Scale Bar
+  var scalebar = new Scalebar({
+    map: map,
+    scalebarUnit: "dual"
+  });
+//Home Button
+  var home = new HomeButton({
+    map: map
+  }, "HomeButton");
+  home.startup();
+//Location Button
+  geoLocate = new LocateButton({
+    map: map
+  }, "LocateButton");
+  geoLocate.startup();
+//Popups
+  var popup = map.infoWindow;
+        popup.highlight = true;
+        popup.titleInBody = false;
+        popup.domNode.className += " Light";
+//Info Windows
+  var template1 = new InfoTemplate();
+    template1.setTitle("<b>${WellNum}</b>");
+    template1.setContent("<b>Type of Well:</b> ${WellType:wellTypeDesc}</br><b>Well Class:</b> ${WellClass:wellClassDesc}</br><b>Max Yield:</b> ${WellMaxYield} gpm</br><b>GPU ID:</b> ${PropId}</br><b>Section, Block & Survey:</b> ${WellSection}, ${WellBlock}, ${WellSurvey}</br><b>Latitude:</b> ${WellLatitude}</br><b>Longitude:</b> ${WellLongitude}<br><b>State Tracking #:</b> ${StTrackingNum}<br><b>Documentation: </b><a target='_blank' href=http://map.northplainsgcd.org/logs/${WellCounty}/${WellNum:urlFunction}.pdf>Click Here</a></br>");
+  var template2 = new InfoTemplate();
+    template2.setTitle("<b>State Well: ${StateWellNumber}</b>");
+    template2.setContent("<b>Type of Well:</b> ${PrimaryWaterUse}</br><b>Elevation:</b> ${Elevation} ft.</br><b>Well Depth:</b> ${WellDepth} ft.</br><b>Latitude:</b> ${CoordDDLat}</br><b>Longitude:</b> ${CoordDDLong}</br><b>Database Results: </b><a target='_blank' href=http://www2.twdb.texas.gov/apps/waterdatainteractive//GetReports.aspx?Num=${StateWellNumber}&Type=GWDB>Click Here</a></br><b>Other Documentation: </b><a target='_blank' href=http://www2.twdb.texas.gov/apps/waterdatainteractive//GetScannedImage.aspx?Num=${StateWellNumber}&amp;Cnty=${CountyName}>Click Here</a>");
+  var template3 = new InfoTemplate();
+    template3.setTitle("<b>Monitor Well: ${WellNm}</b>");
+    template3.setContent("<b>Name:</b> ${Name}</br><b>Well Depth:</b> ${Depth} feet</br><b>State Well Number:</b> ${StateNo}</br><b>Longitude:</b> ${Longitude}</br><b>Latitude:</b> ${Latitude}</br><b>Section, Block & Survey:</b> ${Sec}, ${Blk}, ${Survey}</br><b>Documentation: </b><a target='_blank' href=http://map.northplainsgcd.org/logs/${Co}/${WellNm:urlFunction}.pdf>Click Here</a></br> </br><div class='btn-group' role='group' aria-label='...'><button type='button' class='btn btn-default' id='thicknessButton' data-toggle='modal' data-target='#thicknessModal' onclick='thicknessChart(${StateNo})'>Saturated Thickness</button><button type='button' class='btn btn-default' id='depthButton' data-toggle='modal' data-target='#depthModal' onclick='depthChart(${StateNo})'>Depth to Water</button></div>");
+  var templateWinter = new InfoTemplate();
+    templateWinter.setTitle("<b>Annual Water Level Well: ${County_Nam}");
+    templateWinter.setContent("Test! I SAID THIS IS A TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+//Changing size of infowindows
+  map.infoWindow.resize(300, 500); //300, 210
+//Feature Layers
+  var WinterWater = new FeatureLayer("http://map.northplainsgcd.org/npgcdgis/rest/services/IMPMaps/WinterWater/MapServer/0", {
+    mode: FeatureLayer.MODE_ONDEMAND,
+    InfoTemplate: templateWinter,
+    outFields: ["*"]
+  });
+  var outline = new FeatureLayer("http://map.northplainsgcd.org/npgcdgis/rest/services/IMPMaps/Outline/MapServer/0", {
+    mode: FeatureLayer.MODE_ONDEMAND,
+    outFields: ["*"]
+  });
+//add the legend
+  map.on("layers-add-result", function (evt) {
+    var layerInfo = arrayUtils.map(evt.layers, function (layer, index) {
+      return {layer:layer.layer, title:layer.layer.name};
+    });
+    if (layerInfo.length > 0) {
+      var legendDijit = new Legend({
+        map: map,
+        layerInfos: layerInfo
+      }, "legend");
+      legendDijit.startup();
+    }
+  });
+//Add Layers to map
+  map.addLayers([WinterWater, outline]);
+//Basemap changer
+  $(document).ready(function() {
+      $("#baselayer li").click(function (e) {
+          switch (e.target.text) {
+          case "Imagery":
+              map.setBasemap("hybrid");
+              break;
+          case "Streets":
+              map.setBasemap("streets");
+              break;
+          case "Topographic":
+              map.setBasemap("topo");
+              break;
+          case "Light Gray":
+              map.setBasemap("gray");
+              break;
+          case "National Geographic":
+              map.setBasemap("national-geographic");
+              break;
+          }
+      });
+  });
+});
